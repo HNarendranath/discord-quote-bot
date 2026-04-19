@@ -5,29 +5,23 @@ module.exports = {
 		.setName('quote')
 		.setDescription('Creates a quote from the message replied to or last message sent if no reply made.'),
 	async execute(interaction) {
-		let targetMsg;;
 
-		const channel = interaction.channel;
+		const channel = interaction;
 
-		const cmdMsg = await channel.messages.fetch(interaction.id).catch(() => null);
-		const replyRef = cmdMsg?.reference;
+		const lastMsg = await channel.messages.fetch({ limit: 1 });
+		const targetMsg = lastMsg.first();
 
-		if (replyRef) {
-			// User replied to message
-			targetMsg = await channel.messages.fetch(replyRef.messageId);
-		}
-		else {
-			// No reply, quote last message sent by user
-			const lastMsg = await channel.messages.fetch({ limit: 1, before: interaction.id });
-			targetMsg = lastMsg.first();
-		}
 
 		if (!targetMsg) {
 			return interaction.reply({ content: 'No message found to quote.', ephemeral: true });
 		}
 
-		const quoteChannelId = '';
-		const quoteChannel = interaction.guild.channels.cache.get(quoteChannelId);
+		if (targetMsg.author.id === interaction.client.user.id) {
+			return interaction.reply({ content: 'You can\'t quote me!', ephemeral: true });
+		}
+
+		const quoteChannelId = process.env.QUOTE_CHANNEL_ID;
+		const quoteChannel = await interaction.guild.channels.fetch(quoteChannelId);
 
 		const quoteEmbed = new EmbedBuilder()
 			.setAuthor({
