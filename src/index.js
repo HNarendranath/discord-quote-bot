@@ -5,7 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const Database = require('better-sqlite3');
-const db = new Database('database.sqlite');
+const db = new Database(path.join(__dirname, '../data/database.sqlite'));
 
 
 if (!process.env.DISCORD_TOKEN) {
