@@ -6,7 +6,8 @@ module.exports = {
 		.setDescription('Creates a quote from the message replied to or last message sent if no reply made.'),
 	async execute(interaction) {
 
-		const channel = interaction;
+		const channel = interaction.channel;
+
 
 		const lastMsg = await channel.messages.fetch({ limit: 1 });
 		const targetMsg = lastMsg.first();
