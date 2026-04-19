@@ -28,7 +28,6 @@ Create a `.env` file in the project root:
 
 ```env
 DISCORD_TOKEN=your-bot-token
-CLIENT_ID=your-application-id
 ```
 
 Then start the bot:
@@ -47,7 +46,7 @@ Slash commands register automatically on startup. If they don't appear, check th
 | **Runtime** | Node.js v18+ |
 | **Discord** | [discord.js](https://discord.js.org/) — client, slash command registration, embed builder |
 | **Database** | [better-sqlite3](https://github.com/WiseLibs/better-sqlite3) — synchronous SQLite for per-guild settings |
-| **Config** | dotenv — loads `DISCORD_TOKEN` and `CLIENT_ID` from `.env` |
+| **Config** | dotenv — loads `DISCORD_TOKEN` from `.env` |
 | **Dev tools** | nodemon (auto-restart), eslint |
 
 ## Project structure
@@ -87,7 +86,7 @@ For deployments, pass secrets via environment variables (GitHub Actions secrets,
 
 ## Deployment
 
-Any host that supports Node.js works. Set `DISCORD_TOKEN` and `CLIENT_ID` as environment variables on your host rather than shipping a `.env` file. The bot currently uses a single local SQLite file — if you ever run multiple instances, you'll need a shared datastore.
+Any host that supports Node.js works. Set `DISCORD_TOKEN` as environment variable on your host rather than shipping a `.env` file. The bot currently uses a single local SQLite file — if you ever run multiple instances, you'll need a shared datastore.
 
 ## Troubleshooting
 
