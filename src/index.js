@@ -1,8 +1,12 @@
 require('dotenv').config();
 
-const { Client, Events, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require('discord.js');
 const fs = require('node:fs');
 const path = require('node:path');
+
+const Database = require('better-sqlite3');
+const db = new Database('database.sqlite');
+
 
 if (!process.env.DISCORD_TOKEN) {
 	console.error('ERROR: DISCORD_TOKEN is missing in .env file');
@@ -19,6 +23,17 @@ const client = new Client({
 	    GatewayIntentBits.MessageContent,
 	],
 });
+
+// Create table for guild settings if it doesn't exist
+
+db.prepare(`
+    CREATE TABLE IF NOT EXISTS guild_settings (
+        guild_id TEXT PRIMARY KEY,
+        quote_channel_id TEXT
+    )
+`).run();
+
+client.db = db;
 
 // Load commands
 
@@ -51,9 +66,24 @@ for (const file of eventFiles) {
 }
 
 
-client.once(Events.ClientReady, (readyClient) => {
+client.once(Events.ClientReady, async (readyClient) => {
 	console.log(`Ready! Logged in as ${readyClient.user.tag}`);
+
+	const rest = new REST().setToken(process.env.DISCORD_TOKEN);
+	const cmdData = client.commands.map(cmd => cmd.data.toJSON());
+
+	try {
+		await rest.put(
+			Routes.applicationCommands(readyClient.user.id),
+			{ body: cmdData },
+		);
+		console.log('Successfully reloaded application (/) commands.');
+	}
+	catch (e) {
+		console.error(e);
+	}
 });
+
 
 // Log in to Discord with your client's token
 client.login(token);
