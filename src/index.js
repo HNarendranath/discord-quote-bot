@@ -29,7 +29,8 @@ const client = new Client({
 db.prepare(`
     CREATE TABLE IF NOT EXISTS guild_settings (
         guild_id TEXT PRIMARY KEY,
-        quote_channel_id TEXT
+        quote_channel_id TEXT,
+		embed_color TEXT DEFAULT '#34495E'
     )
 `).run();
 

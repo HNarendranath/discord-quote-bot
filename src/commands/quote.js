@@ -19,7 +19,7 @@ module.exports = {
 		const messages = await channel.messages.fetch({ limit: numMessages });
 		const targetMsg = messages.first();
 
-		const quoteContent = [...messages.values()].map(msg => `${msg.author.username}: ${msg.content}`).join('\n');
+		const quoteContent = [...messages.values()].map(msg => `**${msg.author.username}:** ${msg.content}`).join('\n');
 
 		if (!targetMsg) {
 			return interaction.reply({ content: 'No message found to quote.', ephemeral: true });
@@ -34,10 +34,10 @@ module.exports = {
 
 		const quoteEmbed = new EmbedBuilder()
 			.setDescription(quoteContent || '_[Attachment/Embed]_')
-			.setColor('Random')
+			.setColor('#34495E')
 			.setTimestamp(targetMsg.createdAt)
 			.setFooter({
-				text: `Quoted by ${interaction.user.username}`,
+				text: `Requested by ${interaction.user.username}`,
 			});
 
 		if (targetMsg.attachments.size > 0) {
