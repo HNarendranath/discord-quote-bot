@@ -27,9 +27,11 @@ module.exports = {
 
 		const quoteChannel = await message.guild.channels.fetch(row.quote_channel_id);
 
+		const colour = row.embed_color || '#F1C40F';
+
 		const quoteEmbed = new EmbedBuilder()
 			.setDescription(quoteContent || '_[Attachment/Embed]_')
-			.setColor('#F1C40F')
+			.setColor(colour)
 			.setTimestamp(refMsg.createdAt)
 			.setFooter({
 				text: `Requested by ${message.author.username}`,

@@ -32,9 +32,11 @@ module.exports = {
 		const quoteChannelId = row.quote_channel_id;
 		const quoteChannel = await interaction.guild.channels.fetch(quoteChannelId);
 
+		const colour = row.embed_color || '#F1C40F';
+
 		const quoteEmbed = new EmbedBuilder()
 			.setDescription(quoteContent || '_[Attachment/Embed]_')
-			.setColor('#34495E')
+			.setColor(colour)
 			.setTimestamp(targetMsg.createdAt)
 			.setFooter({
 				text: `Requested by ${interaction.user.username}`,
